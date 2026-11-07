@@ -1,0 +1,177 @@
+{
+  "report_id": "rolling_origin_eval_2024_2026_v1",
+  "generated_at": "2026-09-30T04:15:00Z",
+  "dataset_source": "Grid-Sentinel / Grid-India-derived SCADA 15-minute Snapshot",
+  "dataset_coverage": {
+    "start_timestamp": "2024-11-01 00:00",
+    "end_timestamp": "2026-09-29 23:45",
+    "total_observations": 64860,
+    "total_columns": 164,
+    "cadence_minutes": 15,
+    "target_column": "demand_met_mw",
+    "horizon_intervals": 16,
+    "horizon_hours": 4
+  },
+  "pooled_summary": {
+    "evaluation_protocol": "Chronological 3-window rolling-origin evaluation (no random shuffle, strict causal lag cutoff)",
+    "total_pooled_test_samples": 17472,
+    "seasonal_naive_mae_mw": 5433.4,
+    "candidate_hgb_mae_mw": 3150.4,
+    "mae_improvement_pct": 42.02,
+    "seasonal_naive_rmse_mw": 7409.8,
+    "candidate_hgb_rmse_mw": 4228.4,
+    "rmse_improvement_pct": 42.93,
+    "candidate_pooled_r2": 0.965,
+    "seasonal_naive_pooled_r2": 0.892,
+    "candidate_pooled_mean_bias_mw": -384.2
+  },
+  "model_comparison_pooled": [
+    {
+      "model_id": "persistence_4h",
+      "model_name": "Persistence Baseline (t → t+4h)",
+      "family": "Naive Reference",
+      "mae_mw": 14820.6,
+      "rmse_mw": 18490.2,
+      "r2": 0.341,
+      "mean_bias_mw": 42.1,
+      "sample_count": 17472,
+      "status": "BASELINE_REJECTED",
+      "notes": "Fails during morning and evening diurnal ramps across 16-interval (4h) horizon."
+    },
+    {
+      "model_id": "seasonal_naive_24h",
+      "model_name": "Seasonal Naive Baseline (t-20h → t+4h)",
+      "family": "Diurnal Reference",
+      "mae_mw": 5433.4,
+      "rmse_mw": 7409.8,
+      "r2": 0.892,
+      "mean_bias_mw": -198.5,
+      "sample_count": 17472,
+      "status": "PRIMARY_BENCHMARK",
+      "notes": "Strong diurnal benchmark using previous-day same-hour demand; vulnerable to weather regime shifts and holiday transitions."
+    },
+    {
+      "model_id": "ridge_linear_lags",
+      "model_name": "Ridge Regression (L2 Linear Lag + Cyclical)",
+      "family": "Linear Regularized",
+      "mae_mw": 3684.9,
+      "rmse_mw": 4912.5,
+      "r2": 0.952,
+      "mean_bias_mw": -265.0,
+      "sample_count": 17472,
+      "status": "EXPERIMENT_VALIDATED",
+      "notes": "Captures linear autocorrelation between current demand and 24h seasonal anchor, but underfits non-linear ramp inflections."
+    },
+    {
+      "model_id": "random_forest_residual",
+      "model_name": "Random Forest (Residual Target)",
+      "family": "Bagged Decision Trees",
+      "mae_mw": 3392.1,
+      "rmse_mw": 4518.7,
+      "r2": 0.959,
+      "mean_bias_mw": -412.6,
+      "sample_count": 17472,
+      "status": "EXPERIMENT_VALIDATED",
+      "notes": "Improves non-linear ramp tracking over Ridge, higher variance on high-load summer/monsoon extremes."
+    },
+    {
+      "model_id": "residual_hgb_flexible__source_hour_shrinkage",
+      "model_name": "Residual HistGradientBoosting (Source-Hour Shrinkage)",
+      "family": "Gradient Boosted Trees (Frozen Candidate)",
+      "mae_mw": 3150.4,
+      "rmse_mw": 4228.4,
+      "r2": 0.965,
+      "mean_bias_mw": -384.2,
+      "sample_count": 17472,
+      "status": "FROZEN_CANDIDATE",
+      "notes": "Predicts residual over 24h seasonal anchor with source-hour empirical shrinkage. Best pooled MAE (3,150.4 MW) and RMSE (4,228.4 MW)."
+    }
+  ],
+  "rolling_origin_windows": [
+    {
+      "window_id": "2025_Q3",
+      "label": "2025 Q3 (Jul – Sep 2025)",
+      "train_period": "2024-11-01 to 2025-06-30",
+      "eval_period": "2025-07-01 to 2025-09-30",
+      "sample_count": 5856,
+      "seasonal_naive_mae_mw": 5190.2,
+      "candidate_hgb_mae_mw": 2945.8,
+      "seasonal_naive_rmse_mw": 7084.5,
+      "candidate_hgb_rmse_mw": 3962.1,
+      "candidate_r2": 0.969,
+      "seasonal_naive_mean_bias_mw": -112.4,
+      "candidate_mean_bias_mw": -148.6,
+      "underforecast_rate_pct": 51.8,
+      "overforecast_rate_pct": 48.2,
+      "regime_summary": "Balanced monsoon load variability; residual HGB achieves 43.2% MAE reduction over seasonal naive."
+    },
+    {
+      "window_id": "2026_Q1",
+      "label": "2026 Q1 (Jan – Mar 2026)",
+      "train_period": "2024-11-01 to 2025-12-31",
+      "eval_period": "2026-01-01 to 2026-03-31",
+      "sample_count": 5760,
+      "seasonal_naive_mae_mw": 4892.6,
+      "candidate_hgb_mae_mw": 2714.3,
+      "seasonal_naive_rmse_mw": 6641.2,
+      "candidate_hgb_rmse_mw": 3648.9,
+      "candidate_r2": 0.973,
+      "seasonal_naive_mean_bias_mw": 84.3,
+      "candidate_mean_bias_mw": 138.9,
+      "underforecast_rate_pct": 46.4,
+      "overforecast_rate_pct": 53.6,
+      "regime_summary": "Stable winter-to-spring heating/agricultural transition; lowest absolute error window (MAE 2,714.3 MW)."
+    },
+    {
+      "window_id": "2026_Q3",
+      "label": "2026 Q3 (Jul – Sep 2026)",
+      "train_period": "2024-11-01 to 2026-06-30",
+      "eval_period": "2026-07-01 to 2026-09-29",
+      "sample_count": 5856,
+      "seasonal_naive_mae_mw": 6211.8,
+      "candidate_hgb_mae_mw": 3784.1,
+      "seasonal_naive_rmse_mw": 8428.6,
+      "candidate_hgb_rmse_mw": 5004.2,
+      "candidate_r2": 0.953,
+      "seasonal_naive_mean_bias_mw": -565.2,
+      "candidate_mean_bias_mw": -1142.8,
+      "underforecast_rate_pct": 68.4,
+      "overforecast_rate_pct": 31.6,
+      "regime_summary": "Difficult late-monsoon high-humidity regime. Candidate still beats Seasonal Naive by 39.1% MAE, but exhibits meaningful underforecast bias (-1,142.8 MW mean bias)."
+    }
+  ],
+  "bias_analysis": {
+    "headline_finding": "2026 Q3 exhibits a meaningful underforecast bias (-1,142.8 MW mean error; 68.4% of intervals underforecasted) driven by rapid upward shifts in base cooling and agricultural pumping demand without explicit exogenous weather telemetry.",
+    "hourly_bias_profile": [
+      { "hour": "00:00", "q3_2025_bias_mw": -82, "q1_2026_bias_mw": 95, "q3_2026_bias_mw": -890 },
+      { "hour": "04:00", "q3_2025_bias_mw": -64, "q1_2026_bias_mw": 112, "q3_2026_bias_mw": -740 },
+      { "hour": "08:00", "q3_2025_bias_mw": -190, "q1_2026_bias_mw": 180, "q3_2026_bias_mw": -1120 },
+      { "hour": "12:00", "q3_2025_bias_mw": -145, "q1_2026_bias_mw": 164, "q3_2026_bias_mw": -1050 },
+      { "hour": "16:00", "q3_2025_bias_mw": -210, "q1_2026_bias_mw": 140, "q3_2026_bias_mw": -1380 },
+      { "hour": "20:00", "q3_2025_bias_mw": -235, "q1_2026_bias_mw": 135, "q3_2026_bias_mw": -1675 }
+    ],
+    "robustness_experiments": [
+      {
+        "experiment": "Unshrunk Residual HGB (residual_hgb_v0_unshrunk)",
+        "pooled_mae_mw": 3248.7,
+        "q3_2026_mae_mw": 3912.4,
+        "q3_2026_bias_mw": -1298.5,
+        "finding": "Over-reacts to transient intraday spikes while failing to correct structural level shifts."
+      },
+      {
+        "experiment": "Source-Hour Shrinkage (residual_hgb_flexible__source_hour_shrinkage)",
+        "pooled_mae_mw": 3150.4,
+        "q3_2026_mae_mw": 3784.1,
+        "q3_2026_bias_mw": -1142.8,
+        "finding": "Reduces pooled MAE by 98.3 MW and dampens ramp overshoot, selected as frozen candidate."
+      },
+      {
+        "experiment": "Rolling Bias Offset Correction (Post-hoc experimental)",
+        "pooled_mae_mw": 3189.2,
+        "q3_2026_mae_mw": 3695.0,
+        "q3_2026_bias_mw": -410.2,
+        "finding": "Reduces Q3 bias but slightly degrades Q1 transition MAE; held out of frozen v1 pending exogenous humidity/temperature features."
+      }
+    ]
+  }
+}

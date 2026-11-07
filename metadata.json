@@ -1,0 +1,6 @@
+{
+  "name": "GridSense AI — Energy Grid Intelligence & Forecasting Platform",
+  "description": "AI-powered electricity demand forecasting, SCADA data provenance auditing, scenario simulation, and grid risk intelligence platform built on Grid-India 15-minute telemetry research.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

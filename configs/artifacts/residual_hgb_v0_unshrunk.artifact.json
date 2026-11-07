@@ -1,0 +1,20 @@
+{
+  "artifact_id": "residual_hgb_v0_unshrunk",
+  "artifact_file": "models/residual_hgb_v0_unshrunk.joblib",
+  "created_at": "2026-09-18T11:20:00Z",
+  "model_family": "Residual HistGradientBoostingRegressor (Unshrunk)",
+  "config_id_bound": "demand_4h_exploratory_v0",
+  "target_column": "demand_met_mw",
+  "horizon_intervals": 16,
+  "source_hour_shrinkage": false,
+  "feature_names": [
+    "demand_met_mw",
+    "demand_lag_1h_mw",
+    "demand_lag_4h_mw",
+    "demand_lag_24h_mw",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "artifact_sha256": "e419a02b77c8319f004d12a6b823c9104f581e29d1a08472b6c193f4a82d10e9",
+  "compatibility_notes": "Missing demand_roll_mean_1h_mw, dow_sin, dow_cos and source-hour empirical shrinkage required by frozen configuration configs/experiments/demand_4h_prospective_v1.json."
+}

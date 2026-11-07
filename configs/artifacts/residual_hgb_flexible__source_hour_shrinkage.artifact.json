@@ -1,0 +1,37 @@
+{
+  "artifact_id": "residual_hgb_flexible__source_hour_shrinkage",
+  "artifact_file": "models/residual_hgb_flexible__source_hour_shrinkage.joblib",
+  "created_at": "2026-09-30T02:10:00Z",
+  "model_family": "Residual HistGradientBoostingRegressor + Source-Hour Shrinkage",
+  "config_id_bound": "demand_4h_prospective_v1",
+  "target_column": "demand_met_mw",
+  "horizon_intervals": 16,
+  "source_hour_shrinkage": true,
+  "feature_names": [
+    "demand_met_mw",
+    "demand_lag_1h_mw",
+    "demand_lag_4h_mw",
+    "demand_lag_24h_mw",
+    "demand_roll_mean_1h_mw",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos"
+  ],
+  "tree_ensemble_parameters": {
+    "loss": "squared_error",
+    "max_iter": 350,
+    "learning_rate": 0.045,
+    "max_leaf_nodes": 63,
+    "min_samples_leaf": 40,
+    "l2_regularization": 1.5
+  },
+  "shrinkage_alpha_by_window": {
+    "night_offpeak": 0.91,
+    "morning_ramp": 0.95,
+    "solar_midday": 0.93,
+    "evening_peak": 0.96
+  },
+  "artifact_sha256": "3c9f71a84e20d56b91c4820f7e3a15b6d8902c4e71a3f508b2d694e10c7a83f2",
+  "compatibility_notes": "Exact match for frozen prospective configuration configs/experiments/demand_4h_prospective_v1.json."
+}

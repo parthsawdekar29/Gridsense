@@ -1,0 +1,86 @@
+{
+  "dataset_name": "Grid-Sentinel / Grid-India National SCADA Telemetry Snapshot",
+  "source_repository": "Grid-India (POSOCO) National Load Despatch Centre (NLDC) / Grid-Sentinel Research Archive",
+  "local_snapshot_path": "data/grid_india_scada_15m_snapshot.csv",
+  "dataset_size_mb": 98.4,
+  "observation_count": 64860,
+  "column_count": 164,
+  "sampling_frequency": "15-minute intervals (96 intervals/day)",
+  "time_coverage_start": "2024-11-01 00:00",
+  "time_coverage_end": "2026-09-29 23:45",
+  "local_dataset_watermark": "2026-09-29 23:45",
+  "sha256_hash": "9a7d4c18e3b052f6a1948c7d2e5f03b84c619a2d7e40f1b5c8a3d92e6f104b7c",
+  "license_provenance": "Authentic public grid telemetry snapshot curated for chronological ML benchmarking; raw observations preserved without synthetic interpolation.",
+  "prospective_validation_status": "PROSPECTIVE VALIDATION BLOCKED — NEW AUTHENTIC DATA REQUIRED",
+  "quality_audit": {
+    "total_expected_15m_slots": 67008,
+    "recorded_observations": 64860,
+    "missing_interval_slots": 2148,
+    "missing_target_values_count": 42,
+    "duplicate_timestamps_count": 0,
+    "timestamp_parsing_failures": 0,
+    "cadence_irregularities_count": 118,
+    "schema_mismatches_count": 0,
+    "flagged_outliers_count": 19,
+    "complete_feature_window_rows": 61940,
+    "missing_feature_coverage_rows": 2920
+  },
+  "data_dictionary": [
+    {
+      "column": "timestamp_ist",
+      "type": "datetime (ISO-8601 / IST)",
+      "category": "Authentic Source Data",
+      "status": "VERIFIED",
+      "description": "15-minute SCADA interval timestamp in Indian Standard Time (UTC+05:30)."
+    },
+    {
+      "column": "demand_met_mw",
+      "type": "float64 (MW)",
+      "category": "Authentic Source Data (Supervised Target)",
+      "status": "VERIFIED",
+      "description": "National electricity demand met in Megawatts. Target variable at t + 16 intervals (+4 hours)."
+    },
+    {
+      "column": "total_gen_mw",
+      "type": "float64 (MW)",
+      "category": "Authentic Source Data (Scheduled Proxy Only)",
+      "status": "RESTRICTED_USE",
+      "description": "Scheduled generation aggregate. NOT measured physical delivered supply; excluded from physical deficit/surplus accounting."
+    },
+    {
+      "column": "demand_lag_1h_mw, demand_lag_4h_mw, demand_lag_24h_mw",
+      "type": "float64 (MW)",
+      "category": "Derived Processed Feature",
+      "status": "CAUSAL_VALIDATED",
+      "description": "Strictly causal backward-looking demand lags (4, 16, and 96 intervals prior to issue time)."
+    },
+    {
+      "column": "demand_roll_mean_1h_mw",
+      "type": "float64 (MW)",
+      "category": "Derived Processed Feature",
+      "status": "CAUSAL_VALIDATED",
+      "description": "4-observation trailing mean ending at forecast issue timestamp t."
+    },
+    {
+      "column": "hour_sin, hour_cos, dow_sin, dow_cos",
+      "type": "float64 [-1, 1]",
+      "category": "Derived Processed Feature",
+      "status": "CAUSAL_VALIDATED",
+      "description": "Trigonometric encodings of issue time-of-day and day-of-week."
+    },
+    {
+      "column": "national_battery_soc_mwh",
+      "type": "UNAVAILABLE",
+      "category": "Missing Real-World Telemetry",
+      "status": "NOT_IN_DATASET",
+      "description": "Nationwide utility battery state-of-charge is not present in the 164-column SCADA snapshot. Available only as explicit user-entered simulation assumptions."
+    },
+    {
+      "column": "reconciled_delivered_supply_mw",
+      "type": "UNAVAILABLE",
+      "category": "Missing Real-World Telemetry",
+      "status": "NOT_IN_DATASET",
+      "description": "Reconciled delivered generation + net cross-border imports/exports + transmission losses required for physical imbalance calculation."
+    }
+  ]
+}

@@ -1,0 +1,1080 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* NORVA Proportional Unit & Night Palette */
+  --u: clamp(0.72px, min(calc(100vw / 1440), calc(100vh / 960)), 1.5px);
+  --night: #0f1626;
+  --ink-light: #f4f6fa;
+  --ink-72: rgba(244, 246, 250, 0.72);
+  --ink-46: rgba(244, 246, 250, 0.46);
+  --pill-grey: #2a3245;
+  --norva-lime: #c6ff2e;
+  --norva-cyan: #3fd8ff;
+  --hairline: rgba(255, 255, 255, 0.22);
+
+  /* MOSSLINE Editorial & Solutions Palette */
+  --ink: #10291a;
+  --ink2: #2c4434;
+  --mist: #e7ebe8;
+  --paper: #f6f7f4;
+  --lime: #c6f35c;
+  --lime2: #a9dd3a;
+  --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  /* GridSense Control Centre Palette */
+  --bg-deep-navy: #0D1524;
+  --bg-graphite: #172235;
+  --bg-elevated: #202D40;
+  --accent-cyan: #3FD8FF;
+  --accent-lime: #C6FF2E;
+  --mist-white: #E9EFED;
+  --text-primary: #F4F6FA;
+  --text-secondary: #A8B5C5;
+  --text-muted: #718096;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --u: 1px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  background: var(--night);
+  color: var(--ink-light);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--night);
+  color: var(--ink-light);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.font-display {
+  font-family: var(--sans);
+  letter-spacing: -0.03em;
+}
+
+.font-mono,
+code,
+pre,
+.tabular-nums {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   NORVA × MOSSLINE × GRIDSENSE AI BLENDED HERO & SCROLL ARCHITECTURE
+   ============================================================================ */
+
+.gs-blend-root {
+  background: var(--night);
+  color: var(--ink-light);
+  font-family: var(--sans);
+}
+
+.gs-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 10px;
+  background: var(--norva-lime);
+  color: var(--night);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gs-chip-cyan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 10px;
+  background: rgba(63, 216, 255, 0.14);
+  border: 1px solid rgba(63, 216, 255, 0.45);
+  color: var(--norva-cyan);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ----------------------------------------------------------------------------
+   1. NORVA FULL-SCREEN NIGHT LOADER (6 Cyan Squares Ring + Lime Chevron)
+   ---------------------------------------------------------------------------- */
+.nv-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--night);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.nv-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nv-loader-stage {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nv-ellipse-wide {
+  position: absolute;
+  width: 210px;
+  height: 96px;
+  border-radius: 50%;
+  border: 1px dashed rgba(244, 246, 250, 0.22);
+}
+
+.nv-ellipse-circle {
+  position: absolute;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  border: 1px dashed rgba(63, 216, 255, 0.28);
+}
+
+.nv-mark {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  animation: nvSpin 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes nvSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   2. NORVA FIXED 3-COLUMN NAVIGATION (58u tall)
+   ---------------------------------------------------------------------------- */
+.nv-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: calc(58 * var(--u));
+  padding: 0 calc(36 * var(--u));
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(15, 22, 38, 0.85) 0%, rgba(15, 22, 38, 0) 100%);
+}
+
+.nv-nav-left {
+  display: flex;
+  align-items: center;
+  gap: calc(24 * var(--u));
+}
+
+.nv-nav-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-72);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: calc(11.5 * var(--u));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nv-nav-link:hover {
+  color: var(--norva-lime);
+}
+
+.nv-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: calc(19 * var(--u));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nv-nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(10 * var(--u));
+}
+
+.nv-pill {
+  height: calc(40 * var(--u));
+  padding: 0 calc(18 * var(--u));
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: calc(11.5 * var(--u));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.nv-pill:hover {
+  transform: translateY(-1px);
+}
+
+.nv-pill-grey {
+  background: var(--pill-grey);
+  color: var(--ink-light);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.nv-pill-lime {
+  background: var(--norva-lime);
+  color: var(--night);
+}
+
+/* ----------------------------------------------------------------------------
+   3. 320vh PINNED SCROLL TRACK & FAILSAFE LOCKED ISOMETRIC SCENE
+   ---------------------------------------------------------------------------- */
+.nv-track {
+  position: relative;
+  height: 320vh;
+  background: var(--night);
+}
+
+.nv-scene {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--night);
+}
+
+.nv-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Shade over clip: navy at 55% fading out by 34% from top, 50% fading out by 30% from bottom */
+.nv-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(15, 22, 38, 0.58) 0%, rgba(15, 22, 38, 0) 34%),
+    linear-gradient(0deg, rgba(15, 22, 38, 0.55) 0%, rgba(15, 22, 38, 0) 32%);
+}
+
+/* ----------------------------------------------------------------------------
+   4. HERO COPY WITH 900u PERSPECTIVE STAGE (Tilts back into ground on scroll)
+   ---------------------------------------------------------------------------- */
+.nv-hero-stage {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(88 * var(--u));
+  perspective: calc(900 * var(--u));
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.nv-hero-copy {
+  text-align: center;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+  max-width: calc(980 * var(--u));
+  padding: 0 20px;
+}
+
+.nv-hero-copy h1 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: calc(82 * var(--u));
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  color: var(--ink-light);
+  margin: calc(14 * var(--u)) 0 calc(18 * var(--u));
+}
+
+.nv-hero-sub {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: calc(18 * var(--u));
+  line-height: 1.42;
+  color: var(--ink-72);
+}
+
+/* ----------------------------------------------------------------------------
+   5. SCROLL CUE WITH DRAINING UNDERLINE
+   ---------------------------------------------------------------------------- */
+.nv-scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(36 * var(--u));
+  transform: translateX(-50%);
+  z-index: 25;
+  text-align: center;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.nv-scroll-cue-label {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  padding-bottom: 6px;
+}
+
+.nv-scroll-cue-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(244, 246, 250, 0.22);
+  overflow: hidden;
+}
+
+.nv-scroll-cue-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--norva-lime);
+  transform-origin: right center;
+}
+
+/* ----------------------------------------------------------------------------
+   6. NORVA BOTTOM-LEFT 4-STEP EXPANDING PROCESS LIST (36u / 28u, 440u wide)
+   ---------------------------------------------------------------------------- */
+.nv-process {
+  position: absolute;
+  left: calc(36 * var(--u));
+  bottom: calc(28 * var(--u));
+  width: calc(440 * var(--u));
+  z-index: 30;
+  background: rgba(15, 22, 38, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: calc(16 * var(--u)) calc(18 * var(--u));
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  will-change: transform, opacity;
+}
+
+.nv-proc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: calc(10 * var(--u));
+  margin-bottom: calc(4 * var(--u));
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--mono);
+  font-size: calc(10.5 * var(--u));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--norva-cyan);
+}
+
+.nv-proc-row {
+  padding: calc(10 * var(--u)) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.nv-proc-row:last-child {
+  border-bottom: none;
+}
+
+.nv-proc-top {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+}
+
+.nv-proc-num {
+  width: calc(30 * var(--u));
+  height: calc(30 * var(--u));
+  border-radius: calc(5 * var(--u));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: calc(11.5 * var(--u));
+  color: var(--ink-72);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background-color 0.35s ease, color 0.35s ease;
+  flex-shrink: 0;
+}
+
+.nv-proc-row.is-active .nv-proc-num {
+  background: var(--ink-light);
+  color: var(--night);
+}
+
+.nv-proc-title {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: calc(13.5 * var(--u));
+  color: var(--ink-72);
+  transition: font-size 0.35s ease, color 0.35s ease;
+}
+
+.nv-proc-row.is-active .nv-proc-title {
+  font-size: calc(17.5 * var(--u));
+  font-weight: 600;
+  color: var(--ink-light);
+}
+
+.nv-proc-body-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nv-proc-row.is-active .nv-proc-body-wrap {
+  grid-template-rows: 1fr;
+}
+
+.nv-proc-body-inner {
+  overflow: hidden;
+}
+
+.nv-proc-body {
+  margin-top: calc(10 * var(--u));
+  margin-left: calc(14 * var(--u));
+  padding-left: calc(16 * var(--u));
+  border-left: 1px solid var(--hairline);
+  font-size: calc(13 * var(--u));
+  line-height: 1.48;
+  color: var(--ink-72);
+}
+
+.nv-proc-action {
+  margin-top: calc(8 * var(--u));
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: calc(10.5 * var(--u));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--norva-lime);
+}
+
+/* ----------------------------------------------------------------------------
+   7. MOSSLINE FLOATING LIME HOTSPOTS ON THE ISOMETRIC GRID
+   ---------------------------------------------------------------------------- */
+.gs-hotspot {
+  position: absolute;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  will-change: transform, opacity;
+}
+
+.gs-hs-dot {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--norva-lime);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+  animation: gsPing 2.4s ease-out infinite;
+  flex-shrink: 0;
+}
+
+.gs-hotspot:hover .gs-hs-dot {
+  transform: scale(1.15);
+}
+
+.gs-hs-dot::before,
+.gs-hs-dot::after {
+  content: "";
+  position: absolute;
+  background: var(--night);
+}
+
+.gs-hs-dot::before {
+  width: 10px;
+  height: 1.5px;
+}
+
+.gs-hs-dot::after {
+  width: 1.5px;
+  height: 10px;
+}
+
+@keyframes gsPing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(198, 255, 46, 0.75);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(198, 255, 46, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(198, 255, 46, 0);
+  }
+}
+
+.gs-hs-pill {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgba(15, 22, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.gs-hs-pill em {
+  font-style: normal;
+  color: var(--norva-lime);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, margin-top 0.4s ease;
+}
+
+.gs-hotspot:hover .gs-hs-pill em,
+.gs-hotspot.is-open .gs-hs-pill em {
+  max-height: 22px;
+  margin-top: 3px;
+}
+
+/* ----------------------------------------------------------------------------
+   8. MOSSLINE FROSTED GLASS TELEMETRY CARD + SPARKLINE (Right Side of Hub)
+   ---------------------------------------------------------------------------- */
+.gs-hub-panel {
+  position: absolute;
+  right: calc(36 * var(--u));
+  bottom: calc(28 * var(--u));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--u));
+  width: calc(320 * var(--u));
+  will-change: transform, opacity;
+}
+
+.gs-glass-card {
+  position: relative;
+  padding: calc(18 * var(--u));
+  border-radius: 12px;
+  background: rgba(18, 28, 44, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  color: var(--ink-light);
+}
+
+.gs-glass-card h4 {
+  font-size: calc(15 * var(--u));
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.gs-glass-sub {
+  font-family: var(--mono);
+  font-size: calc(9.5 * var(--u));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-72);
+  margin-top: 5px;
+}
+
+.gs-glass-metric-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.gs-glass-big {
+  font-size: calc(44 * var(--u));
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--norva-lime);
+}
+
+.gs-glass-unit {
+  font-family: var(--mono);
+  font-size: calc(10 * var(--u));
+  letter-spacing: 0.12em;
+  color: var(--ink-72);
+}
+
+.gs-glass-tag {
+  position: absolute;
+  right: calc(16 * var(--u));
+  top: calc(18 * var(--u));
+  background: var(--norva-lime);
+  color: var(--night);
+  font-family: var(--mono);
+  font-size: calc(9.5 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 3px 7px;
+  border-radius: 3px;
+}
+
+.gs-spark-svg {
+  margin-top: 10px;
+  width: 100%;
+  height: calc(64 * var(--u));
+  display: block;
+}
+
+.gs-glass-foot {
+  font-family: var(--mono);
+  font-size: calc(9.5 * var(--u));
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-72);
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 5-Row Module Quick-Launcher */
+.gs-module-list {
+  padding: calc(6 * var(--u)) calc(14 * var(--u));
+  border-radius: 12px;
+  background: rgba(15, 22, 38, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.gs-mod-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 16px;
+  gap: 8px;
+  align-items: center;
+  padding: calc(9 * var(--u)) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--mono);
+  font-size: calc(10.5 * var(--u));
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-72);
+  cursor: pointer;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+.gs-mod-row:last-child {
+  border-bottom: none;
+}
+
+.gs-mod-row:hover {
+  color: var(--norva-lime);
+  padding-left: 5px;
+}
+
+/* ----------------------------------------------------------------------------
+   9. MOSSLINE WHITE ROUNDED SOLUTIONS & ARCHITECTURE PANEL (#sol)
+   ---------------------------------------------------------------------------- */
+#sol {
+  position: relative;
+  z-index: 35;
+  background: #f6f7f4;
+  border-radius: 26px 26px 0 0;
+  padding: 76px 36px 90px;
+  box-shadow: 0 -30px 60px rgba(8, 13, 24, 0.45);
+  color: var(--night);
+}
+
+.sol-container {
+  max-width: 1380px;
+  margin: 0 auto;
+}
+
+.sol-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.sol-head h2 {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: clamp(34px, 3.9vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  max-width: 680px;
+  margin-top: 18px;
+  color: var(--night);
+}
+
+.sol-head p {
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 400px;
+  color: #3b4859;
+}
+
+.sol-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 52px;
+}
+
+.sol-card {
+  position: relative;
+  height: 440px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--night);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.sol-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sol-card:hover .sol-card-bg {
+  transform: scale(1.07);
+}
+
+.sol-card-ov {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(13, 21, 36, 0.62) 0%,
+    rgba(13, 21, 36, 0.15) 40%,
+    rgba(13, 21, 36, 0.88) 100%
+  );
+}
+
+.sol-card-top {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sol-card-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--norva-cyan);
+}
+
+.sol-card-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--norva-lime);
+  color: var(--night);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.35s ease;
+}
+
+.sol-card:hover .sol-card-circle {
+  transform: rotate(-45deg);
+}
+
+.sol-card-bot {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+}
+
+.sol-card-bot h3 {
+  font-family: var(--sans);
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  color: var(--ink-light);
+}
+
+.sol-card-bot p {
+  font-size: 13.5px;
+  line-height: 1.48;
+  color: rgba(244, 246, 250, 0.85);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, margin-top 0.6s ease;
+}
+
+.sol-card:hover .sol-card-bot p {
+  max-height: 90px;
+  margin-top: 10px;
+}
+
+.sol-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 60px;
+  border-top: 1px solid rgba(15, 22, 38, 0.14);
+}
+
+.sol-stat {
+  padding-top: 24px;
+}
+
+.sol-stat-num {
+  font-family: var(--sans);
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--night);
+}
+
+.sol-stat-lbl {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #526071;
+  margin-top: 6px;
+}
+
+/* ============================================================================
+   10. GRIDSENSE CONTROL CENTRE — NORVA × MOSSLINE FROSTED GLASS & EDITORIAL SKIN
+   ============================================================================ */
+.gs-control-centre {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--night);
+  color: var(--ink-light);
+}
+
+/* Upgrade all inner cards inside .gs-control-centre to Mossline Frosted Glass & Norva Precision */
+.gs-control-centre .bg-\[\#172235\] {
+  background-color: rgba(19, 29, 46, 0.72) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.22);
+  backdrop-filter: blur(18px) saturate(1.22);
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 20px 50px rgba(5, 9, 18, 0.42);
+}
+
+.gs-control-centre .bg-\[\#0D1524\],
+.gs-control-centre .bg-\[\#0D1524\]\/80,
+.gs-control-centre .bg-\[\#0D1524\]\/85 {
+  background-color: rgba(11, 17, 30, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.gs-control-centre h2,
+.gs-control-centre h3 {
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+
+/* NORVA 6-Module Top Ribbon Tab Buttons */
+.nv-mod-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ink-72);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.nv-mod-tab:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: var(--ink-light);
+}
+
+.nv-mod-tab.is-active {
+  background: rgba(23, 34, 53, 0.88);
+  border-color: var(--norva-lime);
+  color: var(--ink-light);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.nv-mod-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-72);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.nv-mod-tab.is-active .nv-mod-badge {
+  background: var(--ink-light);
+  color: var(--night);
+}
+
+/* ----------------------------------------------------------------------------
+   11. PHONE & TABLET RESPONSIVE (<= 760px)
+   ---------------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .nv-nav {
+    grid-template-columns: auto 1fr;
+    padding: 0 18px;
+  }
+  .nv-nav-left {
+    display: none;
+  }
+  .nv-pill {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 10.5px;
+  }
+  .nv-hero-stage {
+    top: 96px;
+  }
+  .nv-hero-copy h1 {
+    font-size: clamp(38px, 11vw, 48px);
+  }
+  .nv-hero-sub {
+    font-size: 15px;
+    max-width: 34ch;
+    margin: 0 auto;
+  }
+  .nv-process {
+    left: 18px;
+    right: 18px;
+    bottom: 22px;
+    width: auto;
+  }
+  .gs-hub-panel {
+    display: none;
+  }
+  .gs-hotspot {
+    display: none;
+  }
+  #sol {
+    padding: 50px 18px 70px;
+  }
+  .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-card {
+    height: 340px;
+  }
+  .sol-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-mark {
+    animation: none !important;
+  }
+}
+
+@keyframes cyanFlowDash {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
+.animate-energy-flow {
+  animation: cyanFlowDash 3.2s linear infinite;
+}

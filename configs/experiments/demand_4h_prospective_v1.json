@@ -1,0 +1,104 @@
+{
+  "config_id": "demand_4h_prospective_v1",
+  "config_path": "configs/experiments/demand_4h_prospective_v1.json",
+  "version": "1.0.0-frozen",
+  "frozen_at": "2026-09-30T00:00:00Z",
+  "status": "FROZEN_PROSPECTIVE_CANDIDATE",
+  "candidate_model_id": "residual_hgb_flexible__source_hour_shrinkage",
+  "model_family": "Residual HistGradientBoostingRegressor + Source-Hour Shrinkage",
+  "target": {
+    "column": "demand_met_mw",
+    "unit": "MW",
+    "description": "National electricity demand met (Grid-India SCADA 15-minute telemetry)",
+    "horizon_intervals": 16,
+    "horizon_hours": 4.0,
+    "cadence_minutes": 15,
+    "excluded_supply_proxy": {
+      "column": "total_gen_mw",
+      "reason": "Scheduled generation only; NOT reconciled delivered physical supply. Must never be used to compute physical grid surplus/deficit."
+    }
+  },
+  "baseline_reference": {
+    "model_id": "seasonal_naive_24h",
+    "formula": "demand_met_mw(t + 4h) ≈ demand_met_mw(t - 20h)",
+    "lag_intervals_from_target": 96,
+    "lag_intervals_from_issue": 80
+  },
+  "required_features": [
+    {
+      "name": "demand_met_mw",
+      "label": "Current Demand (t)",
+      "unit": "MW",
+      "lag_intervals": 0,
+      "description": "Observed national demand met at forecast issue timestamp t."
+    },
+    {
+      "name": "demand_lag_1h_mw",
+      "label": "Demand Lagged 1h (t - 1h)",
+      "unit": "MW",
+      "lag_intervals": 4,
+      "description": "Observed national demand 4 fifteen-minute intervals prior to issue time."
+    },
+    {
+      "name": "demand_lag_4h_mw",
+      "label": "Demand Lagged 4h (t - 4h)",
+      "unit": "MW",
+      "lag_intervals": 16,
+      "description": "Observed national demand 16 fifteen-minute intervals prior to issue time."
+    },
+    {
+      "name": "demand_lag_24h_mw",
+      "label": "Demand Lagged 24h (t - 24h)",
+      "unit": "MW",
+      "lag_intervals": 96,
+      "description": "Diurnal reference demand 96 intervals prior to issue time."
+    },
+    {
+      "name": "demand_roll_mean_1h_mw",
+      "label": "Recent 4-Observation Demand Average",
+      "unit": "MW",
+      "window_intervals": 4,
+      "description": "Rolling arithmetic mean across [t - 45m, t - 30m, t - 15m, t]."
+    },
+    {
+      "name": "hour_sin",
+      "label": "Time-of-Day Sine Encoding",
+      "unit": "dimensionless",
+      "description": "sin(2π * fractional_hour / 24.0)"
+    },
+    {
+      "name": "hour_cos",
+      "label": "Time-of-Day Cosine Encoding",
+      "unit": "dimensionless",
+      "description": "cos(2π * fractional_hour / 24.0)"
+    },
+    {
+      "name": "dow_sin",
+      "label": "Day-of-Week Sine Encoding",
+      "unit": "dimensionless",
+      "description": "sin(2π * day_of_week / 7.0)"
+    },
+    {
+      "name": "dow_cos",
+      "label": "Day-of-Week Cosine Encoding",
+      "unit": "dimensionless",
+      "description": "cos(2π * day_of_week / 7.0)"
+    }
+  ],
+  "post_processing": {
+    "source_hour_shrinkage": true,
+    "shrinkage_alpha_by_window": {
+      "night_offpeak": 0.91,
+      "morning_ramp": 0.95,
+      "solar_midday": 0.93,
+      "evening_peak": 0.96
+    },
+    "bias_robustness_guard": "Enabled (evaluated across 2025 Q3, 2026 Q1, 2026 Q3)"
+  },
+  "prospective_gate": {
+    "local_dataset_watermark": "2026-09-29 23:45",
+    "requires_newer_authentic_data": true,
+    "blocked_message": "PROSPECTIVE VALIDATION BLOCKED — NEW AUTHENTIC DATA REQUIRED"
+  },
+  "config_sha256": "8f4b2e91c7d043a6b5e21094c8a7123fd6059e3c1a28b79f4e11d305c9a84b12"
+}
